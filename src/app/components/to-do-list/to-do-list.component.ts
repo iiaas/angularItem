@@ -54,7 +54,7 @@ export class ToDoListComponent implements OnInit {
     this.validateForm = this.fb.group({
       title: [null, [Validators.required]],
       importance: [null, [Validators.required]],
-      time: [null,[Validators.required]],
+      time: [null, [Validators.required]],
     });
     this.editItem = this.fb.group({
       title: [null, [Validators.required]],
@@ -77,17 +77,25 @@ export class ToDoListComponent implements OnInit {
       return this.message.create('warning', `请登录`);
     }
     this.editIsVisible = true;
-    this.currentItem = this.list.find(item => item.id == id) as Item
+    this.currentItem = { ...this.list.find(item => item.id == id) } as Item
   }
   editCancel() {
     this.editIsVisible = false;
   }
   editOk(): any {
-    this.editIsVisible = false;
+    if (!this.editItem.valid) {
+      return Object.values(this.editItem.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
     let targetItem: Item = this.list.find(item => item.id == this.currentItem.id) as Item
     if (targetItem.founder !== localStorage.getItem('username')) {
       return this.message.create('warning', `无法改变他人待办项`);
     }
+    this.editIsVisible = false;
     targetItem.finished = this.editItem.value.finished
     targetItem.time = this.editItem.value.time
     targetItem.title = this.editItem.value.title
@@ -103,6 +111,14 @@ export class ToDoListComponent implements OnInit {
   }
 
   handleOk(): any {
+    if (!this.validateForm.valid) {
+      return Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
     const item: Item = {
       ...this.validateForm.value,
       finished: false,

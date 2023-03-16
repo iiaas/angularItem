@@ -65,6 +65,7 @@ export class TodolistService {
     this._sort = val
   }
   constructor() {
+    // dev
     this.list = this.list.sort((a, b) => (a.importance - b.importance))
   }
 }

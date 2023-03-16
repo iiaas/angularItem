@@ -1,5 +1,5 @@
 <div class="send-request">
-    <button nz-button nzType="primary" (click)="showModal()" style="margin-right: 10px;">创建代办项</button>
+    <button nz-button nzType="primary" (click)="showModal()" style="margin-right: 10px;" *ngIf="router.url=='/mylist'">创建代办项</button>
     <nz-select [(ngModel)]="this.service.sort" (ngModelChange)="sort()">
         <nz-option nzValue="imprtanceUp" nzLabel="按权重升序"></nz-option>
         <nz-option nzValue="imprtanceDown" nzLabel="按权重降序"></nz-option>
