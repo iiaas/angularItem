@@ -1,0 +1,34 @@
+<nz-layout class="layout">
+    <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
+      <div class="logo"></div>
+      <ul nz-menu nzTheme="dark" nzMode="inline">
+        <li nz-menu-item routerLink="/todolist" [nzSelected]="router.url=='/todolist'">
+          <span>待办事项</span>
+        </li>
+        <li nz-menu-item [routerLink]="['/mylist']" [nzSelected]="router.url=='/mylist'">
+          <span>我的待办</span>
+        </li>
+        <li nz-menu-item routerLink="/otherslist" [nzSelected]="router.url=='/otherslist'">
+          <span>他人待办</span>
+        </li>
+      </ul>
+    </nz-sider>
+    <nz-layout>
+      <nz-header>
+        <span *ngIf="username">&emsp;你好，{{username}}</span>
+        <button nz-button [nzType]="'primary'" class="login" (click)="showModal()" *ngIf="!username">登录</button>
+        <button nz-button [nzType]="'primary'" class="login" (click)="logout()" *ngIf="username">注销</button>
+        <nz-modal [(nzVisible)]="isVisible" nzTitle="登录" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+          <ng-container *nzModalContent>
+            <input type="text" nz-input placeholder="请输入用户名" [(ngModel)]="inputVal"/>
+          </ng-container>
+        </nz-modal>
+      </nz-header>
+      <nz-content>
+        <div class="inner-content">
+            <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+      <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer>
+    </nz-layout>
+  </nz-layout>

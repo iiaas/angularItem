@@ -1,0 +1,97 @@
+<div class="send-request">
+    <button nz-button nzType="primary" (click)="showModal()" style="margin-right: 10px;">创建代办项</button>
+    <nz-select [(ngModel)]="this.service.sort" (ngModelChange)="sort()">
+        <nz-option nzValue="imprtanceUp" nzLabel="按权重升序"></nz-option>
+        <nz-option nzValue="imprtanceDown" nzLabel="按权重降序"></nz-option>
+    </nz-select>
+    <nz-modal [(nzVisible)]="isVisible" nzTitle="创建待办项" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+        <ng-container *nzModalContent>
+            <form nz-form [formGroup]="validateForm" (ngSubmit)="handleOk()" nzLayout="inline">
+                <nz-form-item>
+                    <nz-form-label>创建标题</nz-form-label>
+                    <nz-form-control nzErrorTip="请输入标题!">
+                        <input formControlName="title" nz-input placeholder="标题" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label>权重</nz-form-label>
+                    <nz-select [ngModel]="0" formControlName="importance">
+                        <nz-option [nzValue]="0" nzLabel="低"></nz-option>
+                        <nz-option [nzValue]="1" nzLabel="中"></nz-option>
+                        <nz-option [nzValue]="2" nzLabel="高"></nz-option>
+                    </nz-select>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label>创建时间</nz-form-label>
+                    <nz-form-control nzErrorTip="请输入标题!">
+                        <input formControlName="time" nz-input placeholder="时间" [ngModel]="moment().format('YYYY-MM-DD')"/>
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </ng-container>
+    </nz-modal>
+</div>
+<nz-table [nzShowPagination]="false" [nzData]="list">
+    <thead>
+        <tr>
+            <th>标题</th>
+            <th>创建人</th>
+            <th>创建时间</th>
+            <th>权重</th>
+            <th [width]="100">是否完成</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of list" (click)="edit(data.id)">
+            <td>{{ data.title }}</td>
+            <td>{{ data.founder }}</td>
+            <td>{{ data.time }}</td>
+            <td>{{ data.importance | importance }}</td>
+            <td [nzChecked]="data.finished" [nzDisabled]="true"></td>
+            <td>
+                <button nz-button nzType="primary" nzDanger (click)="showDeleteConfirm($event,data)">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+<!-- 修改待办事项 -->
+<nz-modal [(nzVisible)]="editIsVisible" nzTitle="编辑待办项" (nzOnCancel)="editCancel()" (nzOnOk)="editOk()">
+    <ng-container *nzModalContent>
+        <form nz-form [formGroup]="editItem" (ngSubmit)="editOk()" nzLayout="inline">
+            <nz-form-item>
+                <nz-form-label>标题</nz-form-label>
+                <nz-form-control nzErrorTip="请输入标题!">
+                    <input formControlName="title" nz-input placeholder="标题" [(ngModel)]="currentItem.title" [disabled]="true"/>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label>权重</nz-form-label>
+                <nz-select [ngModel]="currentItem.importance" formControlName="importance" >
+                    <nz-option [nzValue]="0" nzLabel="低"></nz-option>
+                    <nz-option [nzValue]="1" nzLabel="中"></nz-option>
+                    <nz-option [nzValue]="2" nzLabel="高"></nz-option>
+                </nz-select>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label>创建人</nz-form-label>
+                <nz-form-control nzErrorTip="请输入创建人!">
+                    <input formControlName="founder" nz-input placeholder="创建人" [(ngModel)]="currentItem.founder" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label>是否完成</nz-form-label>
+                <nz-select [ngModel]="currentItem.finished" formControlName="finished">
+                    <nz-option [nzValue]="true" nzLabel="是"></nz-option>
+                    <nz-option [nzValue]="false" nzLabel="否"></nz-option>
+                </nz-select>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label>创建时间</nz-form-label>
+                <nz-form-control nzErrorTip="请输入创建时间!">
+                    <input formControlName="time" nz-input placeholder="时间" [(ngModel)]="currentItem.time" />
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </ng-container>
+</nz-modal>
