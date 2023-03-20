@@ -25,20 +25,20 @@ export class TodolistService {
       id: 1
     },
     {
-      title: 'dance',
-      founder: '蔡徐坤',
-      time: '2021-08-11',
-      finished: true,
-      importance: 0,
-      id: 2
-    },
-    {
       title: 'rap',
       founder: 'cxk',
       time: '2021-08-12',
       finished: true,
       importance: 1,
       id: 3
+    },
+    {
+      title: 'dance',
+      founder: '蔡徐坤',
+      time: '2021-08-11',
+      finished: true,
+      importance: 0,
+      id: 2
     },
     {
       title: 'basketball',
@@ -65,7 +65,6 @@ export class TodolistService {
     this._sort = val
   }
   constructor() {
-    // dev
-    this.list = this.list.sort((a, b) => (a.importance - b.importance))
+    this.sort = this.sort
   }
 }
